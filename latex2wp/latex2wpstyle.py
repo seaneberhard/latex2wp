@@ -32,22 +32,19 @@ HTML = False
 textcolor = "000000"
 
 # colors that can be used in the text
-colors = { "red" : "ff0000" , "green" : "00ff00" , "blue" : "0000ff" }
+colors = dict(red="ff0000", green="00ff00", blue="0000ff")
 # list of colors defined above
-colorchoice = ["red","green","blue"]
-
+colorchoice = ["red", "green", "blue"]
 
 # counters for theorem-like environments
 # assign any counter to any environment. Make sure that
 # maxcounter is an upper bound to the any counter being used
 
-T = { "theorem" : 0 , "lemma" : 0 , "proposition" : 0, "definition" : 0,
-               "corollary" : 0, "remark" : 3 , "example" : 1, "claim" : 4,
-               "exercise" : 2  }
+T = dict(theorem=0, lemma=0, proposition=0, definition=0, corollary=0, remark=3, example=1, claim=4, exercise=2)
 
 # list of theorem-like environments
-ThmEnvs = ["theorem","definition","lemma","proposition","corollary","claim",
-           "remark","example","exercise"]
+ThmEnvs = ["theorem", "definition", "lemma", "proposition", "corollary", "claim",
+           "remark", "example", "exercise"]
 
 # the way \begin{theorem}, \begin{lemma} etc are translated in HTML
 # the string _ThmType_ stands for the type of theorem
@@ -59,9 +56,8 @@ beginthm = "\n<blockquote><b>_ThmType_ _ThmNumb_</b> <em>"
 # square brackets
 beginnamedthm = "\n<blockquote><b>_ThmType_ _ThmNumb_ (_ThmName_)</b> <em>"
 
-#translation of \end{theorem}, \end{lemma}, etc.
+# translation of \end{theorem}, \end{lemma}, etc.
 endthm = "</em></blockquote>\n<p>\n"
-
 
 beginproof = "<em>Proof:</em> "
 endproof = "$latex \Box&fg=000000$\n\n"
@@ -74,14 +70,14 @@ subsectionstar = "\n<p>\n<b> _SecName_ </b>\n<p>\n"
 # Font styles. Feel free to add others. The key *must* contain
 # an open curly bracket. The value is the namem of a HTML tag.
 fontstyle = {
-  r'{\em ' : 'em',
-  r'{\bf ' : 'b',
-  r'{\it ' : 'i',
-  r'{\sl ' : 'i',
-  r'\textit{' : 'i',
-  r'\textsl{' : 'i',
-  r'\emph{' : 'em',
-  r'\textbf{' : 'b',
+    r'{\em ': 'em',
+    r'{\bf ': 'b',
+    r'{\it ': 'i',
+    r'{\sl ': 'i',
+    r'\textit{': 'i',
+    r'\textsl{': 'i',
+    r'\emph{': 'em',
+    r'\textbf{': 'b',
 }
 
 # Macro definitions
@@ -93,16 +89,15 @@ fontstyle = {
 # Note that you have to write \\ instead of \
 # and \" instead of "
 
-M = [     ["\\to","\\rightarrow"] ,
-          ["\\B","\\{ 0,1 \\}" ],
-          ["\\E","\mathop{\\mathbb E}"],
-          ["\\P","\mathop{\\mathbb P}"],
-          ["\\N","{\\mathbb N}"],
-          ["\\Z","{\\mathbb Z}"],
-          ["\\C","{\\mathbb C}"],
-          ["\\R","{\\mathbb R}"],
-          ["\\Q","{\\mathbb Q}"],
-          ["\\xor","\\oplus"],
-          ["\\eps","\\epsilon"]
-    ]
-
+M = [["\\to", "\\rightarrow"],
+     ["\\B", "\\{ 0,1 \\}"],
+     ["\\E", "\mathop{\\mathbb E}"],
+     ["\\P", "\mathop{\\mathbb P}"],
+     ["\\N", "{\\mathbb N}"],
+     ["\\Z", "{\\mathbb Z}"],
+     ["\\C", "{\\mathbb C}"],
+     ["\\R", "{\\mathbb R}"],
+     ["\\Q", "{\\mathbb Q}"],
+     ["\\xor", "\\oplus"],
+     ["\\eps", "\\epsilon"]
+     ]

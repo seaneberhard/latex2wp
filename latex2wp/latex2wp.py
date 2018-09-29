@@ -53,7 +53,7 @@ esc = [["\\$", "_dollar_", "&#36;", "\\$"],
        [">", "_greater_", ">", "&gt;"],
        ["<", "_lesser_", "<", "&lt;"]]
 
-M = style.M + [["\\more", "<!--more-->"],
+style.M = style.M + [["\\more", "<!--more-->"],
                ["\\newblock", "\\\\"],
                ["\\sloppy", ""],
                ["\\S", "&sect;"]]

@@ -38,29 +38,29 @@ colors = dict(red='ff0000', green='00ff00', blue='0000ff')
 # assign any counter to any environment. Make sure that
 # maxcounter is an upper bound to the any counter being used
 
-T = dict(theorem=0, lemma=0, proposition=0, definition=0, corollary=0, conjecture=0, remark=3, example=1, claim=4,
-         exercise=2)
+theorems = dict(theorem=0, lemma=0, proposition=0, definition=0, corollary=0, conjecture=0, remark=3, example=1,
+                claim=4, exercise=2)
 
 # the way \begin{theorem}, \begin{lemma} etc are translated in HTML
 # the string _ThmType_ stands for the type of theorem
 # the string _ThmNumb_ is the theorem number
-beginthm = "\n<blockquote><b>_ThmType_ _ThmNumb_</b> <em>"
+beginthm = '\n<blockquote><b>_ThmType_ _ThmNumb_</b> <em>'
 
 # translation of \begin{theorem}[...]. The string
 # _ThmName_ stands for the content betwee the
 # square brackets
-beginnamedthm = "\n<blockquote><b>_ThmType_ _ThmNumb_ (_ThmName_)</b> <em>"
+beginnamedthm = '\n<blockquote><b>_ThmType_ _ThmNumb_ (_ThmName_)</b> <em>'
 
 # translation of \end{theorem}, \end{lemma}, etc.
-endthm = "</em></blockquote>\n<p>\n"
+endthm = '</em></blockquote>\n<p>\n'
 
-beginproof = "<em>Proof:</em> "
-endproof = "$latex \Box&fg=000000$\n\n"
+beginproof = '<em>Proof:</em> '
+endproof = '$latex \Box&fg=000000$\n\n'
 
-section = "\n<p>\n<b>_SecNumb_. _SecName_ </b>\n<p>\n"
-sectionstar = "\n<p>\n<b> _SecName_ </b>\n<p>\n"
-subsection = "\n<p>\n<b>  _SecNumb_._SubSecNumb_. _SecName_ </b>\n<p>\n"
-subsectionstar = "\n<p>\n<b> _SecName_ </b>\n<p>\n"
+section = '\n<p>\n<b>_SecNumb_. _SecName_ </b>\n<p>\n'
+sectionstar = '\n<p>\n<b> _SecName_ </b>\n<p>\n'
+subsection = '\n<p>\n<b>  _SecNumb_._SubSecNumb_. _SecName_ </b>\n<p>\n'
+subsectionstar = '\n<p>\n<b> _SecName_ </b>\n<p>\n'
 
 # Font styles. Feel free to add others. The key *must* contain
 # an open curly bracket. The value is the namem of a HTML tag.
@@ -84,15 +84,15 @@ fontstyle = {
 # Note that you have to write \\ instead of \
 # and \" instead of "
 
-M = [["\\to", "\\rightarrow"],
-     ["\\B", "\\{ 0,1 \\}"],
-     ["\\E", "\mathop{\\mathbb E}"],
-     ["\\P", "\mathop{\\mathbb P}"],
-     ["\\N", "{\\mathbb N}"],
-     ["\\Z", "{\\mathbb Z}"],
-     ["\\C", "{\\mathbb C}"],
-     ["\\R", "{\\mathbb R}"],
-     ["\\Q", "{\\mathbb Q}"],
-     ["\\xor", "\\oplus"],
-     ["\\eps", "\\epsilon"]
-     ]
+macros = [['\\to', '\\rightarrow'],
+          ['\\B', '\\{ 0,1 \\}'],
+          ['\\E', '\mathop{\\mathbb E}'],
+          ['\\P', '\mathop{\\mathbb P}'],
+          ['\\N', '{\\mathbb N}'],
+          ['\\Z', '{\\mathbb Z}'],
+          ['\\C', '{\\mathbb C}'],
+          ['\\R', '{\\mathbb R}'],
+          ['\\Q', '{\\mathbb Q}'],
+          ['\\xor', '\\oplus'],
+          ['\\eps', '\\epsilon']
+          ]

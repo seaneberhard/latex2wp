@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from .. import latex2wp
+from .. import main
 
 
 class TestConvert(unittest.TestCase):
@@ -14,7 +14,7 @@ class TestConvert(unittest.TestCase):
         self.maxDiff = None
 
     def test_equals_exactly(self):
-        html = latex2wp.convert_one(self.tex)
+        html = main.convert_one(self.tex)
         self.assertMultiLineEqual(html, self.html_expected)
 
 

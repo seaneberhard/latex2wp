@@ -25,7 +25,7 @@
 
 import re
 
-from . import latex2wpstyle as style
+from . import style as style
 
 # prepare variables computed from the info in latex2wpstyle
 count = {counter: 0 for counter in style.T.values()}

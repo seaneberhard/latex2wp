@@ -25,11 +25,11 @@
 
 import re
 
-import latex2wp.latex2wpstyle as style
+from . import latex2wpstyle as style
 
 # prepare variables computed from the info in latex2wpstyle
-count = {style.T[thm]: 0 for thm in style.ThmEnvs}
-count["section"] = count["subsection"] = count["equation"] = 0
+count = {counter: 0 for counter in style.T.values()}
+count['section'] = count['subsection'] = count['equation'] = 0
 
 ref = {}
 
@@ -502,7 +502,7 @@ def processtext(t):
         elif tcontrol[i].find("\\end") != -1 and tcontrol[i].find("{center}") != -1:
             w = w + "</p>"
         else:
-            for clr in style.colorchoice:
+            for clr in style.colors:
                 if tcontrol[i].find("{" + clr + "}") != -1:
                     w = w + convertcolors(tcontrol[i], clr)
             for thm in style.ThmEnvs:
@@ -670,7 +670,10 @@ def main():
 
     parser = argparse.ArgumentParser(description='Convert LaTeX file to WordPress-ready HTML')
     parser.add_argument('input_files', nargs='+', help='files to convert')
+    parser.add_argument('--html', action='store_true', help='product standard HTML instead of WordPress stuff')
     args = parser.parse_args()
+
+    style.html = args.html
 
     for input_file in args.input_files:
         output_file = os.path.basename(input_file) + '.html'

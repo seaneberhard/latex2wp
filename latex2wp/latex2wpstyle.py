@@ -29,22 +29,17 @@
 HTML = False
 
 # color of LaTeX formulas
-textcolor = "000000"
+textcolor = '000000'
 
 # colors that can be used in the text
-colors = dict(red="ff0000", green="00ff00", blue="0000ff")
-# list of colors defined above
-colorchoice = ["red", "green", "blue"]
+colors = dict(red='ff0000', green='00ff00', blue='0000ff')
 
 # counters for theorem-like environments
 # assign any counter to any environment. Make sure that
 # maxcounter is an upper bound to the any counter being used
 
-T = dict(theorem=0, lemma=0, proposition=0, definition=0, corollary=0, remark=3, example=1, claim=4, exercise=2)
-
-# list of theorem-like environments
-ThmEnvs = ["theorem", "definition", "lemma", "proposition", "corollary", "claim",
-           "remark", "example", "exercise"]
+T = dict(theorem=0, lemma=0, proposition=0, definition=0, corollary=0, conjecture=0, remark=3, example=1, claim=4,
+         exercise=2)
 
 # the way \begin{theorem}, \begin{lemma} etc are translated in HTML
 # the string _ThmType_ stands for the type of theorem

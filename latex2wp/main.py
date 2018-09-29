@@ -35,11 +35,11 @@ ref = {}
 
 endlatex = '&fg=' + style.textcolor
 if style.HTML:
-    endproof = '<img src="http://l.wordpress.com/latex.php?latex=\Box&fg=000000">'
+    endproof = r'<img src="http://l.wordpress.com/latex.php?latex=\Box&fg=000000">'
 
 inthm = ''
 
-"""
+r"""
  At the beginning, the commands \$, \% and \& are temporarily
  replaced by placeholders (the second entry in each 4-tuple).
  At the end, The placeholders in text mode are replaced by
@@ -90,13 +90,13 @@ cb = re.compile("\\{|}")
 
 
 def extractbody(m):
-    begin = re.compile('\\\\begin\s*')
-    m = begin.sub('\\\\begin', m)
-    end = re.compile('\\\\end\s*')
-    m = end.sub('\\\\end', m)
+    begin = re.compile(r'\\begin\s*')
+    m = begin.sub(r'\\begin', m)
+    end = re.compile(r'\\end\s*')
+    m = end.sub(r'\\end', m)
 
-    beginenddoc = re.compile('\\\\begin\\{document}'
-                             '|\\\\end\\{document}')
+    beginenddoc = re.compile(r'\\begin\{document}'
+                             r'|\\end\{document}')
     parse = beginenddoc.split(m)
     if len(parse) == 1:
         m = parse[0]
@@ -119,13 +119,13 @@ def extractbody(m):
     spaces = re.compile('(\n|[ ])+')
     m = spaces.sub(' ', m)
 
-    """
+    r"""
      removes text between \iffalse ... \fi and
      between \iftex ... \fi keeps text between
      \ifblog ... \fi
     """
 
-    ifcommands = re.compile('\\\\iffalse|\\\\ifblog|\\\\iftex|\\\\fi')
+    ifcommands = re.compile(r'\\iffalse|\\ifblog|\\iftex|\\fi')
     L = ifcommands.split(m)
     I = ifcommands.findall(m)
     m = L[0]
@@ -134,7 +134,7 @@ def extractbody(m):
             m = m + L[2 * i - 1]
         m = m + L[2 * i]
 
-    """
+    r"""
      changes $$ ... $$ into \[ ... \] and reformats
      eqnarray* environments as regular array environments
     """
@@ -152,7 +152,7 @@ def extractbody(m):
 
 
 def convertsqb(m):
-    r = re.compile('\\\\item\\s*\\[.*?\\]')
+    r = re.compile(r'\\item\s*\[.*?\]')
 
     Litems = r.findall(m)
     Lrest = r.split(m)
@@ -165,7 +165,7 @@ def convertsqb(m):
         s = s.replace(']', '}')
         m = m + s + Lrest[i + 1]
 
-    r = re.compile('\\\\begin\\s*\\{\\w+}\\s*\\[.*?\\]')
+    r = re.compile(r'\\begin\s*\{\w+}\s*\[.*?\]')
     Lthms = r.findall(m)
     Lrest = r.split(m)
 
@@ -181,8 +181,8 @@ def convertsqb(m):
 
 
 def converttables(m):
-    retable = re.compile('\\\\begin\s*\\{tabular}.*?\\\\end\s*\\{tabular}'
-                         '|\\\\begin\s*\\{btabular}.*?\\\\end\s*\\{btabular}')
+    retable = re.compile(r'\\begin\s*\{tabular}.*?\\end\s*\{tabular}'
+                         r'|\\begin\s*\{btabular}.*?\\end\s*\{btabular}')
     tables = retable.findall(m)
     rest = retable.split(m)
 
@@ -198,7 +198,7 @@ def converttables(m):
 
 
 def convertmacros(m):
-    comm = re.compile('\\\\[a-zA-Z]*')
+    comm = re.compile(r'\\[a-zA-Z]*')
     commands = comm.findall(m)
     rest = comm.split(m)
 
@@ -212,11 +212,11 @@ def convertmacros(m):
 
 
 def convertonetable(m, border):
-    tokens = re.compile('\\\\begin\\{tabular}\s*\\{.*?}'
-                        '|\\\\end\\{tabular}'
-                        '|\\\\begin\\{btabular}\s*\\{.*?}'
-                        '|\\\\end\\{btabular}'
-                        '|&|\\\\\\\\')
+    tokens = re.compile(r'\\begin\{tabular}\s*\{.*?}'
+                        r'|\\end\{tabular}'
+                        r'|\\begin\{btabular}\s*\{.*?}'
+                        r'|\\end\{btabular}'
+                        r'|&|\\\\')
 
     align = {'c': 'center', 'l': 'left', 'r': 'right'}
 
@@ -248,9 +248,9 @@ def convertonetable(m, border):
 
 
 def separatemath(m):
-    mathre = re.compile('\\$.*?\\$'
-                        '|\\\\begin\\{equation}.*?\\\\end\\{equation}'
-                        '|\\\\\\[.*?\\\\\\]')
+    mathre = re.compile(r'\$.*?\$'
+                        r'|\\begin\{equation}.*?\\end\{equation}'
+                        r'|\\\[.*?\\\]')
     math = mathre.findall(m)
     text = mathre.split(m)
     return math, text
@@ -260,17 +260,17 @@ def processmath(M):
     R = []
     global ref
 
-    mathdelim = re.compile('\\$'
-                           '|\\\\begin\\{equation}'
-                           '|\\\\end\\{equation}'
-                           '|\\\\\\[|\\\\\\]')
-    label = re.compile('\\\\label\\{.*?}')
+    mathdelim = re.compile(r'\$'
+                           r'|\\begin\{equation}'
+                           r'|\\end\{equation}'
+                           r'|\\\[|\\\]')
+    label = re.compile(r'\\label\{.*?}')
 
     for m in M:
         md = mathdelim.findall(m)
         mb = mathdelim.split(m)
 
-        """
+        r"""
           In what follows, md[0] contains the initial delimiter,
           which is either \begin{equation}, or $, or \[, and
           mb[1] contains the actual mathematical equation
@@ -295,14 +295,14 @@ def processmath(M):
                 mb[1] = mb[1].replace('&', '%26')
                 mb[1] = mb[1].replace(' ', '+')
                 mb[1] = mb[1].replace('\'', '&#39;')
-                m = '<p align=center><img src="http://l.wordpress.com/latex.php?latex=\displaystyle ' + mb[
+                m = '<p align=center><img src="http://l.wordpress.com/latex.php?latex=\\displaystyle ' + mb[
                     1] + endlatex + '"></p>\n'
             else:
-                m = '<p align=center>$latex \displaystyle ' + mb[1] + endlatex + '$</p>\n'
+                m = '<p align=center>$latex \\displaystyle ' + mb[1] + endlatex + '$</p>\n'
             if m.find('\\label') != -1:
                 mnolab = label.split(m)
                 mlab = label.findall(m)
-                """
+                r"""
                  Now the mathematical equation, which has already
                  been formatted for WordPress, is the union of
                  the strings mnolab[0] and mnolab[1]. The content
@@ -551,7 +551,7 @@ def processfontstyle(w):
 def convertref(m):
     global ref
 
-    p = re.compile('\\\\ref\s*\\{.*?}|\\\\eqref\s*\\{.*?}')
+    p = re.compile(r'\\ref\s*\{.*?}|\\eqref\s*\{.*?}')
 
     T = p.split(m)
     M = p.findall(m)
@@ -569,7 +569,7 @@ def convertref(m):
     return w
 
 
-"""
+r"""
 The program makes several passes through the input.
 
 In a first clean-up, all text before \begin{document}
@@ -609,7 +609,7 @@ and a clickable link to the referenced location.
 
 
 def convert_one(s):
-    """
+    r"""
       extractbody() takes the text between a \begin{document}
       and \end{document}, if present, (otherwise it keeps the
       whole document), normalizes the spacing, and removes comments

@@ -26,7 +26,7 @@
 # Lines starting with #, like this one, are comments
 
 # change to HTML = True to produce standard HTML
-HTML = False
+html = False
 
 # color of LaTeX formulas
 textcolor = '000000'
@@ -55,7 +55,13 @@ beginnamedthm = '\n<blockquote><b>_ThmType_ _ThmNumb_ (_ThmName_)</b> <em>'
 endthm = '</em></blockquote>\n<p>\n'
 
 beginproof = '<em>Proof:</em> '
-endproof = '$latex \Box&fg=000000$\n\n'
+
+
+def endproof():
+    if html:
+        return r'<img src="http://l.wordpress.com/latex.php?latex=\Box&fg=000000">'
+    return '$latex \Box&fg=000000$\n\n'
+
 
 section = '\n<p>\n<b>_SecNumb_. _SecName_ </b>\n<p>\n'
 sectionstar = '\n<p>\n<b> _SecName_ </b>\n<p>\n'

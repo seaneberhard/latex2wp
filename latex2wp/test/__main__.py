@@ -4,28 +4,46 @@ import unittest
 from .. import main
 
 
+def read(resource):
+    resources = os.path.join(os.path.dirname(__file__), 'resources')
+    with open(os.path.join(resources, resource)) as stream:
+        return stream.read()
+
+
+def reload_main():
+    # todo: remove this -- requires better containing the counters to local scopes
+    import imp
+    imp.reload(main)
+
+
 class TestConvert(unittest.TestCase):
-    def setUp(self):
-        resources = os.path.join(os.path.dirname(__file__), 'resources')
-
-        def read(resource):
-            with open(os.path.join(resources, resource)) as stream:
-                return stream.read()
-
-        self.tex = read('example.tex')
-        self.tex_body_only = read('example-body-only.tex')
-        self.html_expected = read('example.html')
+    def runTest(self):
+        reload_main()
         self.maxDiff = None
+        tex = read('example.tex')
+        html = main.convert_one(tex)
+        html_expected = read('example.html')
+        self.assertMultiLineEqual(html, html_expected)
 
-    def test_example(self):
-        html = main.convert_one(self.tex)
-        self.assertMultiLineEqual(html, self.html_expected)
 
-    def test_example_body_only(self):
-        import imp
-        imp.reload(main)  # todo: remove this -- requires better containing the counters to local scopes
-        html = main.convert_one(self.tex_body_only)
-        self.assertMultiLineEqual(html, self.html_expected)
+class TestConvertBodyOnly(unittest.TestCase):
+    def runTest(self):
+        reload_main()
+        self.maxDiff = None
+        tex = read('example-body-only.tex')
+        html = main.convert_one(tex)
+        html_expected = read('example.html')
+        self.assertMultiLineEqual(html, html_expected)
+
+
+class TestStandardHtml(unittest.TestCase):
+    def runTest(self):
+        reload_main()
+        self.maxDiff = None
+        tex = read('example.tex')
+        html = main.convert_one(tex, standard_html=True)
+        html_expected = read('standard-html.html')
+        self.assertMultiLineEqual(html, html_expected)
 
 
 if __name__ == '__main__':

@@ -34,8 +34,6 @@ count['section'] = count['subsection'] = count['equation'] = 0
 ref = {}
 
 endlatex = '&fg=' + style.textcolor
-if style.HTML:
-    endproof = r'<img src="http://l.wordpress.com/latex.php?latex=\Box&fg=000000">'
 
 inthm = ''
 
@@ -277,7 +275,7 @@ def processmath(M):
         """
 
         if md[0] == '$':
-            if style.HTML:
+            if style.html:
                 m = m.replace('$', '')
                 m = m.replace('+', '%2B')
                 m = m.replace(' ', '+')
@@ -290,7 +288,7 @@ def processmath(M):
             if md[0].find('\\begin') != -1:
                 count['equation'] += 1
                 mb[1] = mb[1] + '\\ \\ \\ \\ \\ (' + str(count['equation']) + ')'
-            if style.HTML:
+            if style.html:
                 mb[1] = mb[1].replace('+', '%2B')
                 mb[1] = mb[1].replace('&', '%26')
                 mb[1] = mb[1].replace(' ', '+')
@@ -385,7 +383,7 @@ def convertproof(m):
     if m.find('begin') != -1:
         return style.beginproof
     else:
-        return style.endproof
+        return style.endproof()
 
 
 def convertsection(m):
@@ -608,12 +606,14 @@ and a clickable link to the referenced location.
 """
 
 
-def convert_one(s):
+def convert_one(s, standard_html=False):
     r"""
       extractbody() takes the text between a \begin{document}
       and \end{document}, if present, (otherwise it keeps the
       whole document), normalizes the spacing, and removes comments
     """
+    style.html = standard_html
+
     s = extractbody(s)
 
     # formats tables
@@ -655,9 +655,9 @@ def convert_one(s):
     # translating the \ref{} commands
     s = convertref(s)
 
-    if style.HTML:
+    if style.html:
         s = '<head><style>body{max-width:55em;}a:link{color:#4444aa;}a:visited{color:#4444aa;}a:hover{' \
-            'background-color:#aaaaFF;}</style></head><body>' + s + "</body></html> "
+            'background-color:#aaaaFF;}</style></head><body>' + s + '</body></html>'
 
     s = s.replace('<p>', '\n<p>\n')
 

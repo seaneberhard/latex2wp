@@ -505,7 +505,7 @@ def processtext(t):
             for clr in style.colors:
                 if tcontrol[i].find("{" + clr + "}") != -1:
                     w = w + convertcolors(tcontrol[i], clr)
-            for thm in style.ThmEnvs:
+            for thm in style.T:
                 if tcontrol[i] == "\\end{" + thm + "}":
                     w = w + convertendthm()
                 elif tcontrol[i] == "\\begin{" + thm + "}":

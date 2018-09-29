@@ -1,0 +1,179 @@
+
+<p>
+Look at the document source to see how to <s>strike out</s> text, how to <span style="color:#ff0000;">use</span> <span style="color:#00ff00;">different</span> <span style="color:#0000ff;">colors</span>, and how to <a href="http://www.google.com">link to URLs with snapshot preview</a> and how to <a class="snap_noshots" href="http://www.google.com">link to URLs without snapshot preview</a>.
+<p>
+There is a command which is ignored by pdflatex and which defines where to cut the post in the version displayed on the main page<!--more-->
+<p>
+Anything between the conditional declarations <em>ifblog . . . fi</em> is ignored by LaTeX and processed by latex2wp. Anything between <em>iftex . . . fi</em> is processed by LaTex and ignored by latex2wp.
+<p>
+ <span style="color:#00ff00;">This green sentence appears only in WordPress </span> 
+<p>
+
+<p>
+This is useful if one, in desperation, wants to put pure HTML commands in the <em>ifblog . . . fi</em> scope.
+<p>
+
+<blockquote><b>Lemma 1 (Main)</b> <em> <a name="lmmain"></a> Let $latex {\cal F}&fg=000000$ be a total ramification of a compactifier, then <a name="eqlemma"><p align=center>$latex \displaystyle   \forall g \in {\cal F}. g^2 = \eta \ \ \ \ \ (1)&fg=000000$</p>
+</a> </em></blockquote>
+
+<p>
+
+
+<p>
+The (modifiable) numbering scheme is that lemmas, theorems, propositions, remarks and corollaries share the same counters, while exercises and examples have each their own counter.
+<p>
+
+<blockquote><b>Theorem 2</b> <em> <a name="thad"></a> The ad&egrave;le of a number field is never hyperbolically transfinite. </em></blockquote>
+
+<p>
+
+
+<p>
+<em>Proof:</em>  Left as an exercise. $latex \Box&fg=000000$
+
+
+<p>
+
+<blockquote><b>Exercise 1</b> <em> Find a counterexample to Theorem <a href="#thad">2</a>. </em></blockquote>
+
+<p>
+
+
+<p>
+
+<blockquote><b>Exercise 2 (Advanced)</b> <em> Prove Lemma <a href="#lmmain">1</a>. </em></blockquote>
+
+<p>
+
+
+<p>
+Note that accented characters are allowed. Unfortunately, Erd&ouml;s's name cannot be properly typeset in HTML. (Note that to get the above approximation, you need to type backslash-H-space-o, rather than backslash-H-{o}. Both are good in LaTeX, but only the second is recognized by LaTeX2WP.)
+<p>
+One can correctly type the names of H&aring;stad, Szemer&eacute;di, &#268;ech, and so on.
+<p>
+It is possible to have numbered equations
+<p>
+<a name="eqtest"><p align=center>$latex \displaystyle   \frac 1 {x^2} \ge 0 \ \ \ \ \ (2)&fg=000000$</p>
+</a>
+<p>
+and unnumbered equations
+<p>
+<p align=center>$latex \displaystyle  t(x) - \frac 12 &gt; x^{\frac 13} &fg=000000$</p>
+
+<p>
+Unnumbered equations can be created with the double-dollar sign command or with the backslash-square bracket command.
+<p>
+<p align=center>$latex \displaystyle  f(x) = \int_{-\infty}^{x} \frac 1 {t^2} dt &fg=000000$</p>
+
+<p>
+It is possible to refer to equations and theorems via the <em>ref</em>, <em>eqref</em> and <em>label</em> LaTeX commands, for example to Equation (<a href="#eqtest">2</a>), to Equation <a href="#eqlemma">(1)</a>, and to Lemma <a href="#lmmain">1</a> above.
+<p>
+eqnarray* is supported, but not eqnarray:
+<p>
+<p align=center>$latex \displaystyle  \begin{array}{rcl}  f(x) & &lt; & x^2 - y^2\\ & = & (x+y) \cdot (x-y) \end{array} &fg=000000$</p>
+
+<p>
+<em>You <b>can</b> nest a <b>bold</b> text inside an emphasized text or viceversa.</em>
+<p>
+The theorem-like environments <em>theorem</em>, <em>lemma</em>, <em>proposition</em>, <em>remark</em>, <em>corollary</em>, <em>example</em> and <em>exercise</em> are defined, as is the <em>proof</em> environment.
+<p>
+The LaTex commands to type &#36;, &#37;, and &amp; are supported outside math mode, and &#37; and &amp; are supported in math mode as well:
+<p>
+<p align=center>$latex \displaystyle  30 \& 10 \% &fg=000000$</p>
+
+<p>
+The section symbol &sect; is also supported.
+<p>
+WordPress has trouble if a LaTeX expression containing a $latex {&lt;}&fg=000000$ symbol, such as $latex {x^2 &lt; x^2 + 1}&fg=000000$ is followed by an expression containing a $latex {&gt;}&fg=000000$ symbol, such as $latex {(x+y)^2 &gt; (x+y)^2 - 3}&fg=000000$. This is fixed by converting the inequality symbols into ``HTML character codes.'' Always write the symbols $latex {&lt;}&fg=000000$ and $latex {&gt;}&fg=000000$ in math mode.
+<p>
+It it is possible to have tabular environments, both with borders (the border will not be displayed in the LaTeX preview), as in 
+<p>
+<table border="1" align=center><td align=left> blog </td><td align=right> quality</td></tr><tr><td align=left> what's new </td><td align=right> excellent</td></tr><tr><td align=left> in theory </td><td align=right> poor </td></tr></table>
+<p>
+and without borders as in
+<p>
+<table align = center><tr><td align=center> $latex {a}&fg=000000$ </td><td align=center> $latex {\rightarrow}&fg=000000$ </td><td align=center> $latex {b}&fg=000000$</td></tr><tr><td align=center> $latex {\downarrow}&fg=000000$ </td><td align=center> </td><td align=center> $latex {\uparrow}&fg=000000$</td></tr><tr><td align=center> $latex {c}&fg=000000$ </td><td align=center> $latex {\rightarrow}&fg=000000$ </td><td align=center> $latex {d}&fg=000000$ </td></tr></table>
+<p>
+(The tabular environments will be centered in WordPress, but not in the LaTeX preview.)
+<p>
+And it is possible to include a picture so that the pdf file produced with pdflatex imports it from a local image file (which has to be pdf, gif, jpeg, or png) and the WordPress post imports it from a URL.
+<p>
+<p align=center><img width = 400 src="http://imgs.xkcd.com/comics/donald_knuth.png"></p>
+<p>
+The <em>image</em> command used to generate the above image has three parameter: a size parameter for either the width or the height, expressed in pixels (if different from the original resolution, the picture will be scaled), a URL for the location of the image (this will be used by WordPress) and a local file name (which will used by pdflatex).
+<p>
+It is possible to have numbered and unnumbered sections and subsections. References to <em>label</em> commands which are not in the scope of a numbered equation or a numbered theorem-like environment will refer to the section number, such as a reference to Section <a href="#sec">1</a> below.
+<p>
+HTML does not have good support for itemized list with descriptors (what one gets in LaTeX using the <em>itemize</em> environment with optional parameters in square brackets after the <em>item</em> commands). We can only offer the following rather ugly rendering:
+<p>
+
+
+<ul> <li>Case a. Description of case a <li>Case b. Description of case b 
+</ul>
+
+
+<p>
+
+
+<p>
+
+<b> Examples of Sections </b>
+
+<p>
+
+
+<p>
+
+
+<p>
+
+<b> And Subsections </b>
+
+<p>
+
+
+<p>
+
+
+<p>
+
+<b>1. A section </b>
+
+<p>
+
+ <a name="sec"></a>
+<p>
+
+
+<p>
+
+<b>  1.1. And a subsection </b>
+
+<p>
+
+
+<p>
+
+
+<p>
+
+<b>2. Changing the style </b>
+
+<p>
+
+
+<p>
+The file latex2wpstyle.py contains several definitions that determine the appearance of the WordPress translation. It should be self-explanatory to change the way sections, subsections, proofs and theorem-like environments are typeset, and to change the numbering scheme for theorem-like environments.
+<p>
+The variable $latex {M}&fg=000000$ in latex2wpstyle.py contains a list of pairs of strings. For every pair, every occurrence of the first string in the document is replaced by an occurrence of the second before proceeding to the conversion from LaTeX to WordPress. If you want to use simple macros (which do not involve parameter-passing) then edit $latex {M}&fg=000000$ to add support for your own LaTeX macros. (You will have to define the macros in macrosblog.tex as well, otherwise you will not be able to compile your LaTeX file and preview it.)
+<p>
+Some macros are already defined. For example, backslash-E produces an expectation symbol:
+<p>
+<p align=center>$latex \displaystyle  \mathop{\mathbb E}_{x \in X} f(x) := \sum_{x\in X} \mathop{\mathbb P} [x] \cdot f(x) &fg=000000$</p>
+
+<p>
+Some more macros (see the LaTeX source)
+<p>
+<p align=center>$latex \displaystyle  \{ 0,1 \}, {\mathbb R} , {\mathbb C}, {\mathbb Z}, {\mathbb N} , {\mathbb Q}, \epsilon &fg=000000$</p>
+
+<p>

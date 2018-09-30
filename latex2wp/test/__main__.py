@@ -2,6 +2,7 @@ import os
 import unittest
 
 from .. import main
+from ..main import convert_one
 
 
 def read(resource):
@@ -21,7 +22,7 @@ class TestConvert(unittest.TestCase):
         reload_main()
         self.maxDiff = None
         tex = read('example.tex')
-        html = main.convert_one(tex)
+        html = convert_one(tex)
         html_expected = read('example.html')
         self.assertMultiLineEqual(html, html_expected)
 
@@ -31,7 +32,7 @@ class TestConvertBodyOnly(unittest.TestCase):
         reload_main()
         self.maxDiff = None
         tex = read('example-body-only.tex')
-        html = main.convert_one(tex)
+        html = convert_one(tex)
         html_expected = read('example.html')
         self.assertMultiLineEqual(html, html_expected)
 
@@ -41,7 +42,7 @@ class TestStandardHtml(unittest.TestCase):
         reload_main()
         self.maxDiff = None
         tex = read('example.tex')
-        html = main.convert_one(tex, standard_html=True)
+        html = convert_one(tex, html=True)
         html_expected = read('standard-html.html')
         self.assertMultiLineEqual(html, html_expected)
 

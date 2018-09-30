@@ -88,63 +88,40 @@ cb = re.compile("\\{|}")
 
 
 def extractbody(m):
-    begin = re.compile(r'\\begin\s*')
-    m = begin.sub(r'\\begin', m)
-    end = re.compile(r'\\end\s*')
-    m = end.sub(r'\\end', m)
-
-    beginenddoc = re.compile(r'\\begin\{document}'
-                             r'|\\end\{document}')
-    parse = beginenddoc.split(m)
-    if len(parse) == 1:
-        m = parse[0]
-    else:
-        m = parse[1]
-
+    r"""
+    Extract the text in \begin{document}...\end{document}, if present; otherwise keep everything. Also remove
+    comments, normalize spacing, process ifs and replace $$ by \[ and \].
     """
-      removes comments, replaces double returns with <p> and
-      other returns and multiple spaces by a single space.
-    """
+    # look for \begin{document}...\end{document}
+    match = re.search(r'\\begin{document}.*\\end{document}', m, re.DOTALL)
+    if match:
+        m = match.group(0)
 
+    # replace escaped characters by placeholders
     for e in esc:
         m = m.replace(e[0], e[1])
 
-    comments = re.compile('%.*?\n')
-    m = comments.sub(' ', m)
+    m = re.sub(r'%.*', '', m)  # remove comments
+    m = re.sub(r'\n\n+', '<p>', m)  # replace double newlines with <p>
+    m = re.sub(r'\s+', ' ', m)  # replace other newlines and multiple spaces with a single space
 
-    multiplereturns = re.compile('\n\n+')
-    m = multiplereturns.sub('<p>', m)
-    spaces = re.compile('(\n|[ ])+')
-    m = spaces.sub(' ', m)
+    # process \if[false|tex|blog]...\fi sequences (assume no nesting)
+    m = re.sub(r'\\iffalse.*?\\fi', '', m)
+    m = re.sub(r'\\iftex.*?\\fi', '', m)
+    m = re.sub(r'\\ifblog', '', m)
+    m = re.sub(r'\\fi', '', m)
 
-    r"""
-     removes text between \iffalse ... \fi and
-     between \iftex ... \fi keeps text between
-     \ifblog ... \fi
-    """
+    # change $$...$$ to \[...\]
+    split = re.split(r'\$\$', m)
+    assert len(split) % 2 == 1, 'ended in math mode'
+    m = split[0]
+    for i in range(1, len(split), 2):
+        m = m + '\\[' + split[i] + '\\]' + split[i + 1]
 
-    ifcommands = re.compile(r'\\iffalse|\\ifblog|\\iftex|\\fi')
-    L = ifcommands.split(m)
-    I = ifcommands.findall(m)
-    m = L[0]
-    for i in range(1, (len(L) + 1) // 2):
-        if I[2 * i - 2] == '\\ifblog':
-            m = m + L[2 * i - 1]
-        m = m + L[2 * i]
-
-    r"""
-     changes $$ ... $$ into \[ ... \] and reformats
-     eqnarray* environments as regular array environments
-    """
-
-    doubledollar = re.compile('\\$\\$')
-    L = doubledollar.split(m)
-    m = L[0]
-    for i in range(1, (len(L) + 1) // 2):
-        m = m + '\\[' + L[2 * i - 1] + '\\]' + L[2 * i]
-
+    # change eqnarray* environments to regular array environments
     m = m.replace('\\begin{eqnarray*}', '\\[ \\begin{array}{rcl} ')
     m = m.replace('\\end{eqnarray*}', '\\end{array} \\]')
+    # todo: what about align*?
 
     return m
 
@@ -606,13 +583,8 @@ and a clickable link to the referenced location.
 """
 
 
-def convert_one(s, standard_html=False):
-    r"""
-      extractbody() takes the text between a \begin{document}
-      and \end{document}, if present, (otherwise it keeps the
-      whole document), normalizes the spacing, and removes comments
-    """
-    style.html = standard_html
+def convert_one(s, html=False):
+    style.html = html
 
     s = extractbody(s)
 

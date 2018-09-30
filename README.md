@@ -1,11 +1,12 @@
-HOW TO GET STARTED
+### How to get started
+
 
 Have latex2wp.py,latex2wpstyle.py, macrosblog.tex and your tex file
 in the same directory. Use post-template.tex as a starting
 point, writing your text between the \begin{document}
 and \end{document}.
 
-HOW TO USE
+### How to use
 
 In the directory in which latex2wp.py and your
 tex file are both present, type
@@ -16,8 +17,7 @@ is ready to be cut and pasted into WordPress.
 
 --------------------
 
-
-WHAT WORKS
+### What works
 
 See the file example.tex to see how to import figures, have
 text appear in different colors, have links to URLs, and
@@ -48,8 +48,7 @@ The tabular environment works
 
 -------------------
 
-
-WHAT DOESN'T WORK
+### What doesn't work
 
 WordPress has some limitations to the kind of latex equations
 it can display. As a consequence, align and eqnarray are
@@ -68,7 +67,7 @@ There is no support for footnotes.
 
 ------------------------
 
-HOW TO CUSTOMIZE
+### How to customize
 
 The file latex2wpstyle.py can be easily modified to
 make the program create pure HTML, to add new macros,
@@ -153,3 +152,28 @@ design of theorem-like environments and other details.
  Set the section, sectionstar, subsection, and subsectionstar 
  variables
 
+---
+
+### Changelog
+
+Version 1.0, 2018-09-30
+  - Migrate project to github
+  - Migrate to Python 3
+  - Enable installation by pip
+  - Package up and add commandline entrypoint 'latex2wp'
+
+Version 0.6.2, 2009-05-06
+  - Additional support for accented characters
+  - Convert '>' and '<' to HTML codes
+  - Changed to handling of \& and \% in math mode to reflect
+    different WordPress treatment of them
+
+Version 0.6.1, 2009-02-23
+  - Simplified format of latex2wpstyle.py (by Radu Grigore)
+  - Allow nesting of font styles such as \bf and \em (by Radu Grigore)
+  - Allow escaped symbols such as \$ in math mode
+  - LaTeX macros are correctly "tokenized"
+  - Support eqnarray* environment
+
+
+Version 0.6, 2009-02-21 -  First release

@@ -31,19 +31,13 @@ from . import style as style
 count = {counter: 0 for counter in style.theorems.values()}
 count['section'] = count['subsection'] = count['equation'] = 0
 
-ref = {}
-
 endlatex = '&fg=' + style.textcolor
 
-inthm = ''
-
-r"""
- At the beginning, the commands \$, \% and \& are temporarily
- replaced by placeholders (the second entry in each 4-tuple).
- At the end, The placeholders in text mode are replaced by
- the third entry, and the placeholders in math mode are
- replaced by the fourth entry.
-"""
+# At the beginning, the commands \$, \% and \& are temporarily
+# replaced by placeholders (the second entry in each 4-tuple).
+# At the end, The placeholders in text mode are replaced by
+# the third entry, and the placeholders in math mode are
+# replaced by the fourth entry.
 
 esc = [['\\$', '_dollar_', '&#36;', '\\$'],
        ['\\%', '_percent_', '&#37;', '\\%'],
@@ -84,7 +78,7 @@ Mnomath = [['\\\\', '<br/>\n'],
            ['\\"u', '&uuml;'],
            ['\\v{C}', '&#268;']]
 
-cb = re.compile(r'\{|}')
+cb = re.compile(r'{|}')
 
 
 def extractbody(m):
@@ -226,9 +220,8 @@ def separatemath(m):
     return math, text
 
 
-def processmath(M):
+def processmath(M, ref):
     R = []
-    global ref
 
     mathdelim = re.compile(r'\$'
                            r'|\\begin{equation}'
@@ -308,10 +301,7 @@ def convertenum(m):
 
 
 def convertbeginnamedthm(thname, thm):
-    global inthm
-
     count[style.theorems[thm]] += 1
-    inthm = thm
     t = style.beginnamedthm.replace('_ThmType_', thm.capitalize())
     t = t.replace('_ThmNumb_', str(count[style.theorems[thm]]))
     t = t.replace('_ThmName_', thname)
@@ -319,26 +309,13 @@ def convertbeginnamedthm(thname, thm):
 
 
 def convertbeginthm(thm):
-    global inthm
-
     count[style.theorems[thm]] += 1
-    inthm = thm
     t = style.beginthm.replace('_ThmType_', thm.capitalize())
     t = t.replace('_ThmNumb_', str(count[style.theorems[thm]]))
     return t
 
 
-def convertendthm():
-    global inthm
-
-    inthm = ''
-    return style.endthm
-
-
-def convertlab(m):
-    global inthm
-    global ref
-
+def convertlab(m, ref, inthm):
     m = cb.split(m)[1]
     m = m.replace(':', '')
     if inthm != '':
@@ -410,7 +387,7 @@ def convertstrike(m):
     return '<s>' + L[1] + '</s>'
 
 
-def processtext(t):
+def processtext(t, ref):
     p = re.compile('\\\\begin\\{\\w+}'
                    '|\\\\nbegin\\{\\w+}\\s*\\{.*?}'
                    '|\\\\end\\{\\w+}'
@@ -435,6 +412,7 @@ def processtext(t):
     w = ttext[0]
 
     i = 0
+    inthm = ''
     while i < len(tcontrol):
         if tcontrol[i].find('{itemize}') != -1:
             w = w + convertitm(tcontrol[i])
@@ -457,7 +435,7 @@ def processtext(t):
         elif tcontrol[i].find('\\section') != -1:
             w = w + convertsection(tcontrol[i])
         elif tcontrol[i].find('\\label') != -1:
-            w = w + convertlab(tcontrol[i])
+            w = w + convertlab(tcontrol[i], ref, inthm)
         elif tcontrol[i].find('\\image') != -1:
             w = w + convertimage(tcontrol[i])
         elif tcontrol[i].find('\\sout') != -1:
@@ -472,13 +450,16 @@ def processtext(t):
                     w = w + convertcolors(tcontrol[i], clr)
             for thm in style.theorems:
                 if tcontrol[i] == '\\end{' + thm + '}':
-                    w = w + convertendthm()
+                    w = w + style.endthm
+                    inthm = ''
                 elif tcontrol[i] == '\\begin{' + thm + '}':
                     w = w + convertbeginthm(thm)
+                    inthm = thm
                 elif tcontrol[i].find('\\nbegin{' + thm + '}') != -1:
                     L = cb.split(tcontrol[i])
                     thname = L[3]
-                    w = w + convertbeginnamedthm(thname, thm)
+                    w += convertbeginnamedthm(thname, thm)
+                    inthm = thm
         w += ttext[i + 1]
         i += 1
 
@@ -513,9 +494,7 @@ def processfontstyle(w):
     return ww
 
 
-def convertref(m):
-    global ref
-
+def convertref(m, ref):
     p = re.compile(r'\\ref\s*\{.*?}|\\eqref\s*\{.*?}')
 
     T = p.split(m)
@@ -575,6 +554,7 @@ def convert_one(s, html=False):
     and a clickable link to the referenced location.
     """
     style.html = html
+    ref = {}
 
     s = extractbody(s)
 
@@ -590,15 +570,14 @@ def convert_one(s, html=False):
     # extracts the math parts, and replaces the with placeholders
     # processes math and text separately, then puts the processed
     # math equations in place of the placeholders
-
     (math, text) = separatemath(s)
 
     s = text[0]
     for i in range(len(math)):
         s = s + '__math' + str(i) + '__' + text[i + 1]
 
-    s = processtext(s)
-    math = processmath(math)
+    s = processtext(s, ref)
+    math = processmath(math, ref)
 
     # converts escape sequences such as \$ to HTML codes
     # This must be done after formatting the tables or the '&' in
@@ -613,7 +592,7 @@ def convert_one(s, html=False):
         s = s.replace('__math' + str(i) + '__', math[i])
 
     # translating the \ref{} commands
-    s = convertref(s)
+    s = convertref(s, ref)
 
     if style.html:
         s = '<head><style>body{max-width:55em;}a:link{color:#4444aa;}a:visited{color:#4444aa;}a:hover{' \

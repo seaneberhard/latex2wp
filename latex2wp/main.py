@@ -231,20 +231,18 @@ def processmath(M):
     global ref
 
     mathdelim = re.compile(r'\$'
-                           r'|\\begin\{equation}'
-                           r'|\\end\{equation}'
+                           r'|\\begin{equation}'
+                           r'|\\end{equation}'
                            r'|\\\[|\\\]')
-    label = re.compile(r'\\label\{.*?}')
+    label = re.compile(r'\\label{.*?}')
 
     for m in M:
         md = mathdelim.findall(m)
         mb = mathdelim.split(m)
 
-        r"""
-          In what follows, md[0] contains the initial delimiter,
-          which is either \begin{equation}, or $, or \[, and
-          mb[1] contains the actual mathematical equation
-        """
+        # In what follows, md[0] contains the initial delimiter,
+        # which is either \begin{equation}, or $, or \[, and
+        # mb[1] contains the actual mathematical equation
 
         if md[0] == '$':
             if style.html:
@@ -272,12 +270,11 @@ def processmath(M):
             if m.find('\\label') != -1:
                 mnolab = label.split(m)
                 mlab = label.findall(m)
-                r"""
-                 Now the mathematical equation, which has already
-                 been formatted for WordPress, is the union of
-                 the strings mnolab[0] and mnolab[1]. The content
-                 of the \label{...} command is in mlab[0]
-                """
+
+                # Now the mathematical equation, which has already
+                # been formatted for WordPress, is the union of
+                # the strings mnolab[0] and mnolab[1]. The content
+                # of the \label{...} command is in mlab[0]
                 lab = mlab[0]
                 lab = cb.split(lab)[1]
                 lab = lab.replace(':', '')
@@ -361,10 +358,8 @@ def convertproof(m):
 def convertsection(m):
     L = cb.split(m)
 
-    """
-        L[0] contains the \\section or \\section* command, and
-        L[1] contains the section name
-      """
+    # L[0] contains the \\section or \\section* command, and
+    # L[1] contains the section name
 
     if L[0].find('*') == -1:
         t = style.section
@@ -539,46 +534,46 @@ def convertref(m):
     return w
 
 
-r"""
-The program makes several passes through the input.
-
-In a first clean-up, all text before \begin{document}
-and after \end{document}, if present, is removed,
-all double-returns are converted
-to <p>, and all remaining returns are converted to
-spaces.
-
-The second step implements a few simple macros. The user can
-add support for more macros if desired by editing the
-convertmacros() procedure.
-
-Then the program separates the mathematical
-from the text parts. (It assumes that the document does
-not start with a mathematical expression.) 
-
-It makes one pass through the text part, translating
-environments such as theorem, lemma, proof, enumerate, itemize,
-\em, and \bf. Along the way, it keeps counters for the current
-section and subsection and for the current numbered theorem-like
-environment, as well as a  flag that tells whether one is
-inside a theorem-like environment or not. Every time a \label{xx}
-command is encountered, we give ref[xx] the value of the section
-in which the command appears, or the number of the theorem-like
-environment in which it appears (if applicable). Each appearence
-of \label is replace by an html "name" tag, so that later we can
-replace \ref commands by clickable html links.
-
-The next step is to make a pass through the mathematical environments.
-Displayed equations are numbered and centered, and when a \label{xx}
-command is encountered we give ref[xx] the number of the current
-equation. 
-
-A final pass replaces \ref{xx} commands by the number in ref[xx],
-and a clickable link to the referenced location.
-"""
-
-
 def convert_one(s, html=False):
+    r"""
+    Convert one latex string to HTML.
+
+    The program makes several passes through the input.
+
+    In a first clean-up, all text before \begin{document}
+    and after \end{document}, if present, is removed,
+    all double-returns are converted
+    to <p>, and all remaining returns are converted to
+    spaces.
+
+    The second step implements a few simple macros. The user can
+    add support for more macros if desired by editing the
+    convertmacros() procedure.
+
+    Then the program separates the mathematical
+    from the text parts. (It assumes that the document does
+    not start with a mathematical expression.)
+
+    It makes one pass through the text part, translating
+    environments such as theorem, lemma, proof, enumerate, itemize,
+    \em, and \bf. Along the way, it keeps counters for the current
+    section and subsection and for the current numbered theorem-like
+    environment, as well as a  flag that tells whether one is
+    inside a theorem-like environment or not. Every time a \label{xx}
+    command is encountered, we give ref[xx] the value of the section
+    in which the command appears, or the number of the theorem-like
+    environment in which it appears (if applicable). Each appearence
+    of \label is replace by an html "name" tag, so that later we can
+    replace \ref commands by clickable html links.
+
+    The next step is to make a pass through the mathematical environments.
+    Displayed equations are numbered and centered, and when a \label{xx}
+    command is encountered we give ref[xx] the number of the current
+    equation.
+
+    A final pass replaces \ref{xx} commands by the number in ref[xx],
+    and a clickable link to the referenced location.
+    """
     style.html = html
 
     s = extractbody(s)
@@ -608,14 +603,12 @@ def convert_one(s, html=False):
     # converts escape sequences such as \$ to HTML codes
     # This must be done after formatting the tables or the '&' in
     # the HTML codes will create problems
-
     for e in esc:
         s = s.replace(e[1], e[2])
         for i in range(len(math)):
             math[i] = math[i].replace(e[1], e[3])
 
     # puts the math equations back into the text
-
     for i in range(len(math)):
         s = s.replace('__math' + str(i) + '__', math[i])
 

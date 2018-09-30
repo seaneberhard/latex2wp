@@ -71,7 +71,7 @@ Version 1.0, 2018-09-30
   - Migrate project to github
   - Migrate to Python 3
   - Enable installation by pip
-  - Package up and add commandline entrypoint 'latex2wp'
+  - Package up and add commandline entrypoint `latex2wp`
 
 Version 0.6.2, 2009-05-06
   - Additional support for accented characters

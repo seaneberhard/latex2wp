@@ -84,7 +84,7 @@ Mnomath = [['\\\\', '<br/>\n'],
            ['\\"u', '&uuml;'],
            ['\\v{C}', '&#268;']]
 
-cb = re.compile("\\{|}")
+cb = re.compile(r'\{|}')
 
 
 def extractbody(m):
@@ -156,41 +156,22 @@ def convertsqb(m):
 
 
 def converttables(m):
-    retable = re.compile(r'\\begin\s*\{tabular}.*?\\end\s*\{tabular}'
-                         r'|\\begin\s*\{btabular}.*?\\end\s*\{btabular}')
+    retable = re.compile(r'\\begin{b?tabular}.*?\\end{b?tabular}')
     tables = retable.findall(m)
     rest = retable.split(m)
 
     m = rest[0]
     for i in range(len(tables)):
-        if tables[i].find('{btabular}') != -1:
-            m = m + convertonetable(tables[i], True)
-        else:
-            m = m + convertonetable(tables[i], False)
-        m = m + rest[i + 1]
+        m += convertonetable(tables[i])
+        m += rest[i + 1]
 
     return m
 
 
-def convertmacros(m):
-    comm = re.compile(r'\\[a-zA-Z]*')
-    commands = comm.findall(m)
-    rest = comm.split(m)
-
-    r = rest[0]
-    for i in range(len(commands)):
-        for s1, s2 in style.macros:
-            if s1 == commands[i]:
-                commands[i] = s2
-        r = r + commands[i] + rest[i + 1]
-    return r
-
-
-def convertonetable(m, border):
-    tokens = re.compile(r'\\begin\{tabular}\s*\{.*?}'
-                        r'|\\end\{tabular}'
-                        r'|\\begin\{btabular}\s*\{.*?}'
-                        r'|\\end\{btabular}'
+def convertonetable(m):
+    border = m.find('{btabular}') != -1
+    tokens = re.compile(r'\\begin{b?tabular}{.*?}'
+                        r'|\\end{b?tabular}'
                         r'|&|\\\\')
 
     align = {'c': 'center', 'l': 'left', 'r': 'right'}
@@ -220,6 +201,20 @@ def convertonetable(m, border):
             i = 0
     m = m + '</tr></table>'
     return m
+
+
+def convertmacros(m):
+    comm = re.compile(r'\\[a-zA-Z]*')
+    commands = comm.findall(m)
+    rest = comm.split(m)
+
+    r = rest[0]
+    for i in range(len(commands)):
+        for s1, s2 in style.macros:
+            if s1 == commands[i]:
+                commands[i] = s2
+        r = r + commands[i] + rest[i + 1]
+    return r
 
 
 def separatemath(m):

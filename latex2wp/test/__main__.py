@@ -17,7 +17,7 @@ def reload_main():
     imp.reload(main)
 
 
-class TestConvert(unittest.TestCase):
+class TestLatexToWordPress(unittest.TestCase):
     def runTest(self):
         reload_main()
         self.maxDiff = None
@@ -27,17 +27,17 @@ class TestConvert(unittest.TestCase):
         self.assertMultiLineEqual(html, html_expected)
 
 
-class TestConvertBodyOnly(unittest.TestCase):
+class TestLatexBodyOnlyToWordPress(unittest.TestCase):
     def runTest(self):
         reload_main()
         self.maxDiff = None
-        tex = read('example-body-only.tex')
+        tex = read('example.tex').split(r'\begin{document}')[1].split(r'\end{document}')[0]
         html = convert_one(tex)
         html_expected = read('example.html')
         self.assertMultiLineEqual(html, html_expected)
 
 
-class TestStandardHtml(unittest.TestCase):
+class TestLatexToStandardHtml(unittest.TestCase):
     def runTest(self):
         reload_main()
         self.maxDiff = None

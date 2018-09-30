@@ -31,7 +31,7 @@ A few macros are predefined, such as `\E` for `\mathop{\mathbb E}`, `\P` for `\m
 Several theorem-like numbered environments are supported,
 such as `theorem`, `lemma`, `proposition`, `conjecture` `remark`, `corollary`, `example`, and `exercise`. In addition, there is the `proof` environment.
 
-You can use the inline math environment `$...$` and the displayed math environments `$$...$$`, `\[ ... \]`,`\begin{equation}...\end{equation}`. WordPress has some limitations to the kind of latex equations it can display. As a consequence, `align` and `eqnarray` are not supported. You can, however, use `eqnarray*`, and you can use `array` inside a math environment.
+You can use the inline math environment `$...$` and the displayed math environments `$$...$$`, `\[...\]`,`\begin{equation}...\end{equation}`. WordPress has some limitations to the kind of latex equations it can display. As a consequence, `align` and `eqnarray` are not supported. You can, however, use `eqnarray*`, and you can use `array` inside a math environment.
 
 The tabular environment works.
 

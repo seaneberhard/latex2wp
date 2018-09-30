@@ -1,9 +1,9 @@
 """
- Copyright 2009 Luca Trevisan
+ Original work: Copyright 2009 Luca Trevisan
+ (additional contributors: Radu Grigore)
 
- Additional contributors: Radu Grigore
-
- LaTeX2WP version 0.6.2
+ Modified work: Copyright 2018 Sean Eberhard
+ (additional contributors: see https://github.com/seaneberhard/latex2wp/graphs/contributors)
 
  This file is part of LaTeX2WP, a program that converts
  a LaTeX document into a format that is ready to be

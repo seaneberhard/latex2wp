@@ -27,10 +27,6 @@ import re
 
 from . import style as style
 
-# prepare variables computed from the info in latex2wpstyle
-count = {counter: 0 for counter in style.theorems.values()}
-count['section'] = count['subsection'] = count['equation'] = 0
-
 endlatex = '&fg=' + style.textcolor
 
 # At the beginning, the commands \$, \% and \& are temporarily
@@ -220,7 +216,7 @@ def separatemath(m):
     return math, text
 
 
-def processmath(M, ref):
+def processmath(M, ref, count):
     R = []
 
     mathdelim = re.compile(r'\$'
@@ -300,7 +296,7 @@ def convertenum(m):
         return '\n</ol>\n\n'
 
 
-def convertbeginnamedthm(thname, thm):
+def convertbeginnamedthm(thname, thm, count):
     count[style.theorems[thm]] += 1
     t = style.beginnamedthm.replace('_ThmType_', thm.capitalize())
     t = t.replace('_ThmNumb_', str(count[style.theorems[thm]]))
@@ -308,14 +304,14 @@ def convertbeginnamedthm(thname, thm):
     return t
 
 
-def convertbeginthm(thm):
+def convertbeginthm(thm, count):
     count[style.theorems[thm]] += 1
     t = style.beginthm.replace('_ThmType_', thm.capitalize())
     t = t.replace('_ThmNumb_', str(count[style.theorems[thm]]))
     return t
 
 
-def convertlab(m, ref, inthm):
+def convertlab(m, ref, inthm, count):
     m = cb.split(m)[1]
     m = m.replace(':', '')
     if inthm != '':
@@ -332,7 +328,7 @@ def convertproof(m):
         return style.endproof()
 
 
-def convertsection(m):
+def convertsection(m, count):
     L = cb.split(m)
 
     # L[0] contains the \\section or \\section* command, and
@@ -351,7 +347,7 @@ def convertsection(m):
     return t
 
 
-def convertsubsection(m):
+def convertsubsection(m, count):
     L = cb.split(m)
 
     if L[0].find('*') == -1:
@@ -387,7 +383,7 @@ def convertstrike(m):
     return '<s>' + L[1] + '</s>'
 
 
-def processtext(t, ref):
+def processtext(t, ref, count):
     p = re.compile('\\\\begin\\{\\w+}'
                    '|\\\\nbegin\\{\\w+}\\s*\\{.*?}'
                    '|\\\\end\\{\\w+}'
@@ -431,11 +427,11 @@ def processtext(t, ref):
         elif tcontrol[i].find('{proof}') != -1:
             w = w + convertproof(tcontrol[i])
         elif tcontrol[i].find('\\subsection') != -1:
-            w = w + convertsubsection(tcontrol[i])
+            w = w + convertsubsection(tcontrol[i], count)
         elif tcontrol[i].find('\\section') != -1:
-            w = w + convertsection(tcontrol[i])
+            w = w + convertsection(tcontrol[i], count)
         elif tcontrol[i].find('\\label') != -1:
-            w = w + convertlab(tcontrol[i], ref, inthm)
+            w = w + convertlab(tcontrol[i], ref, inthm, count)
         elif tcontrol[i].find('\\image') != -1:
             w = w + convertimage(tcontrol[i])
         elif tcontrol[i].find('\\sout') != -1:
@@ -453,12 +449,12 @@ def processtext(t, ref):
                     w = w + style.endthm
                     inthm = ''
                 elif tcontrol[i] == '\\begin{' + thm + '}':
-                    w = w + convertbeginthm(thm)
+                    w = w + convertbeginthm(thm, count)
                     inthm = thm
                 elif tcontrol[i].find('\\nbegin{' + thm + '}') != -1:
                     L = cb.split(tcontrol[i])
                     thname = L[3]
-                    w += convertbeginnamedthm(thname, thm)
+                    w += convertbeginnamedthm(thname, thm, count)
                     inthm = thm
         w += ttext[i + 1]
         i += 1
@@ -556,6 +552,10 @@ def convert_one(s, html=False):
     style.html = html
     ref = {}
 
+    # prepare variables computed from the info in latex2wpstyle
+    count = {counter: 0 for counter in style.theorems.values()}
+    count['section'] = count['subsection'] = count['equation'] = 0
+
     s = extractbody(s)
 
     # formats tables
@@ -576,8 +576,8 @@ def convert_one(s, html=False):
     for i in range(len(math)):
         s = s + '__math' + str(i) + '__' + text[i + 1]
 
-    s = processtext(s, ref)
-    math = processmath(math, ref)
+    s = processtext(s, ref, count)
+    math = processmath(math, ref, count)
 
     # converts escape sequences such as \$ to HTML codes
     # This must be done after formatting the tables or the '&' in

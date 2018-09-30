@@ -1,7 +1,6 @@
 import os
 import unittest
 
-from .. import main
 from ..main import convert_one
 
 
@@ -11,15 +10,8 @@ def read(resource):
         return stream.read()
 
 
-def reload_main():
-    # todo: remove this -- requires better containing the counters to local scopes
-    import imp
-    imp.reload(main)
-
-
 class TestLatexToWordPress(unittest.TestCase):
     def runTest(self):
-        reload_main()
         self.maxDiff = None
         tex = read('example.tex')
         html = convert_one(tex)
@@ -29,7 +21,6 @@ class TestLatexToWordPress(unittest.TestCase):
 
 class TestLatexBodyOnlyToWordPress(unittest.TestCase):
     def runTest(self):
-        reload_main()
         self.maxDiff = None
         tex = read('example.tex').split(r'\begin{document}')[1].split(r'\end{document}')[0]
         html = convert_one(tex)
@@ -39,7 +30,6 @@ class TestLatexBodyOnlyToWordPress(unittest.TestCase):
 
 class TestLatexToStandardHtml(unittest.TestCase):
     def runTest(self):
-        reload_main()
         self.maxDiff = None
         tex = read('example.tex')
         html = convert_one(tex, html=True)

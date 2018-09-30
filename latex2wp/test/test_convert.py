@@ -26,7 +26,7 @@
 import os
 import unittest
 
-from ..main import convert_one
+from latex2wp.main import convert_one
 
 
 def read(resource):

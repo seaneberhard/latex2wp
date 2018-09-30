@@ -10,4 +10,6 @@ setup(
     author_email='eberhard.math@gmail.com',
     description='convert LaTeX to WordPress-ready HTML',
     entry_points=dict(console_scripts=['latex2wp = latex2wp.main:main']),
+    test_suite='nose.collector',
+    tests_require=['nose'],
 )

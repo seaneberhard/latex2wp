@@ -608,14 +608,14 @@ def main():
     import os
 
     parser = argparse.ArgumentParser(description='Convert LaTeX file to WordPress-ready HTML')
-    parser.add_argument('input_files', nargs='+', help='files to convert')
+    parser.add_argument('input_file', nargs='+', help='files to convert')
     parser.add_argument('--html', action='store_true', help='produce standard HTML instead of WordPress stuff')
     args = parser.parse_args()
 
     style.html = args.html
 
-    for input_file in args.input_files:
-        output_file = os.path.basename(input_file) + '.html'
+    for input_file in args.input_file:
+        output_file = os.path.splitext(os.path.basename(input_file))[0] + '.html'
         with open(input_file, 'r') as input_stream:
             latex = input_stream.read()
         html = convert_one(latex)

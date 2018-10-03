@@ -1,14 +1,12 @@
 ### How to install
 
-You need python 2.7+ or 3.6+. You can install latex2wp using pip:
+You need python 3.6+. You can install latex2wp using pip:
 
 `pip install git+https://github.com/seaneberhard/latex2wp`.
 
 ### How to use
 
-Use template/post-template.tex as a starting point, writing your text between the `\begin{document}` and `\end{document}`. Do not modify the header or `macrosblog.tex`, as your changes will not be picked up.
-
-In the directory of your tex file, do
+Use template/post-template.tex as a starting point, writing your text between the `\begin{document}` and `\end{document}`. In the directory of your tex file, do
 
 `latex2wp yourlatexfile.tex`.
 
@@ -26,10 +24,10 @@ See the file `latex2wp/test/resources/example.tex` to see how to import figures,
 
 Anything between `\iftex...\fi` is compiled in LaTeX but ignored in the conversion to WordPress; anything between `\ifblog...\fi` is converted to WordPress but ignored by LaTeX. Anything between `\iffalse...\fi` is ignored by both.
 
-A few macros are predefined, such as `\E` for `\mathop{\mathbb E}`, `\P` for `\mathop{\mathbb P}` and so on.
+There is very limited support for macros. All macros must be defined with `\def`, they must have no arguments, they must be independent, and they must appear outside the main `\begin{document}...\end{document}` block.
 
 Several theorem-like numbered environments are supported,
-such as `theorem`, `lemma`, `proposition`, `conjecture` `remark`, `corollary`, `example`, and `exercise`. In addition, there is the `proof` environment.
+such as `theorem`, `lemma`, `proposition`, `conjecture`, `remark`, `corollary`, `example`, and `exercise`. In addition, there is the `proof` environment.
 
 You can use the inline math environment `$...$` and the displayed math environments `$$...$$`, `\[...\]`, `\begin{equation}...\end{equation}`. WordPress has some limitations to the kind of latex equations it can display. As a consequence, `align` and `eqnarray` are not supported. You can, however, use `eqnarray*`, and you can use `array` inside a math environment.
 
@@ -47,7 +45,7 @@ There is no support for bibliographic references or footnotes.
 
 ### How to customize
 
-The file `latex2wp/style.py` can be easily modified to add new macros, to add new theorem-like environments or change their numbering conventions, or to change the typesetting design of theorem-like environments and other details. To do this you will need to clone the git repo, and pip install your local version by doing `pip install .` in your checkout.
+The file `latex2wp/style.py` can be easily modified to add to add new theorem-like environments or change their numbering conventions, or to change the typesetting design of theorem-like environments and other details. To do this you will need to clone the git repo, and pip install your local version by doing `pip install .` in your checkout.
 
 For example, suppose you want to change the formatting of theorem-like environments. The string `beginthm` specifies what to do at the beginning of a theorem-like environment. In the string, `_ThmType_` will be replaced by the type of theorem (e.g. `Theorem`, or `Lemma`, or `Corollary`, etc.) and `_ThmNumb_` will be replaced by the theorem number. So the standard setting
 

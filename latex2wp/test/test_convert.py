@@ -29,7 +29,7 @@ import unittest
 from latex2wp.main import convert_one
 
 
-def read(resource):
+def get_resource(resource):
     resources = os.path.join(os.path.dirname(__file__), 'resources')
     with open(os.path.join(resources, resource)) as stream:
         return stream.read()
@@ -38,29 +38,16 @@ def read(resource):
 class TestLatexToWordPress(unittest.TestCase):
     def runTest(self):
         self.maxDiff = None
-        tex = read('example.tex')
+        tex = get_resource('example.tex')
         html = convert_one(tex)
-        html_expected = read('example.html')
-        self.assertMultiLineEqual(html, html_expected)
-
-
-class TestLatexBodyOnlyToWordPress(unittest.TestCase):
-    def runTest(self):
-        self.maxDiff = None
-        tex = read('example.tex').split(r'\begin{document}')[1].split(r'\end{document}')[0]
-        html = convert_one(tex)
-        html_expected = read('example.html')
+        html_expected = get_resource('example.html')
         self.assertMultiLineEqual(html, html_expected)
 
 
 class TestLatexToStandardHtml(unittest.TestCase):
     def runTest(self):
         self.maxDiff = None
-        tex = read('example.tex')
+        tex = get_resource('example.tex')
         html = convert_one(tex, html=True)
-        html_expected = read('standard-html.html')
+        html_expected = get_resource('standard-html.html')
         self.assertMultiLineEqual(html, html_expected)
-
-
-if __name__ == '__main__':
-    unittest.main()

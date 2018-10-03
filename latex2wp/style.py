@@ -23,11 +23,6 @@
  see <http://www.gnu.org/licenses/>.
 """
 
-# Lines starting with #, like this one, are comments
-
-# change to HTML = True to produce standard HTML
-html = False
-
 # color of LaTeX formulas
 textcolor = '000000'
 
@@ -37,7 +32,6 @@ colors = dict(red='ff0000', green='00ff00', blue='0000ff')
 # counters for theorem-like environments
 # assign any counter to any environment. Make sure that
 # maxcounter is an upper bound to the any counter being used
-
 theorems = dict(theorem=0, lemma=0, proposition=0, definition=0, corollary=0, conjecture=0, remark=3, example=1,
                 claim=4, exercise=2)
 
@@ -57,7 +51,7 @@ endthm = '</em></blockquote>\n<p>\n'
 beginproof = '<em>Proof:</em> '
 
 
-def endproof():
+def endproof(html):
     if html:
         return r'<img src="http://l.wordpress.com/latex.php?latex=\Box&fg=000000">'
     return '$latex \Box&fg=000000$\n\n'
@@ -80,25 +74,3 @@ fontstyle = {
     r'\emph{': 'em',
     r'\textbf{': 'b',
 }
-
-# Macro definitions
-# It is a sequence of pairs [string1,string2], and
-# latex2wp will replace each occurrence of string1 with an
-# occurrence of string2. The substitutions are performed
-# in the same order as the pairs appear below.
-# Feel free to add your own.
-# Note that you have to write \\ instead of \
-# and \" instead of "
-
-macros = [['\\to', '\\rightarrow'],
-          ['\\B', '\\{ 0,1 \\}'],
-          ['\\E', '\mathop{\\mathbb E}'],
-          ['\\P', '\mathop{\\mathbb P}'],
-          ['\\N', '{\\mathbb N}'],
-          ['\\Z', '{\\mathbb Z}'],
-          ['\\C', '{\\mathbb C}'],
-          ['\\R', '{\\mathbb R}'],
-          ['\\Q', '{\\mathbb Q}'],
-          ['\\xor', '\\oplus'],
-          ['\\eps', '\\epsilon']
-          ]

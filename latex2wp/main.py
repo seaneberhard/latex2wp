@@ -25,7 +25,13 @@
 
 import re
 
-from . import style as style
+from . import style
+
+
+class ParseError(Exception):
+    """base exception for all parse errors"""
+    pass
+
 
 endlatex = '&fg=' + style.textcolor
 
@@ -41,10 +47,10 @@ esc = [['\\$', '_dollar_', '&#36;', '\\$'],
        ['>', '_greater_', '>', '&gt;'],
        ['<', '_lesser_', '<', '&lt;']]
 
-style.macros = style.macros + [['\\more', '<!--more-->'],
-                               ['\\newblock', '\\\\'],
-                               ['\\sloppy', ''],
-                               ['\\S', '&sect;']]
+standard_macros = [['\\more', '<!--more-->'],
+                   ['\\newblock', '\\\\'],
+                   ['\\sloppy', ''],
+                   ['\\S', '&sect;']]
 
 Mnomath = [['\\\\', '<br/>\n'],
            ['\\ ', ' '],
@@ -77,6 +83,31 @@ Mnomath = [['\\\\', '<br/>\n'],
 cb = re.compile(r'{|}')
 
 
+def find_macros(s):
+    keys = re.findall(r'\\def(.*?){', s)
+    chunks = re.split(r'\\def.*?{', s)
+    return [(key, to_closing_bracket(chunk)) for key, chunk in zip(keys, chunks[1:])]
+
+
+def to_closing_bracket(chunk):
+    height = 1
+    idx = -1
+    try:
+        while height > 0:
+            idx += 1
+            if chunk[idx] == '\\':
+                idx += 1
+                letters = re.match(r'[a-zA-Z]*', chunk[idx:]).group(0)
+                idx += max(len(letters) - 1, 0)
+            elif chunk[idx] == '{':
+                height += 1
+            elif chunk[idx] == '}':
+                height -= 1
+        return chunk[:idx]
+    except IndexError:
+        raise ParseError('group has no closing bracket')
+
+
 def extractbody(m):
     r"""
     Extract the text in \begin{document}...\end{document}, if present; otherwise keep everything. Also remove
@@ -84,8 +115,9 @@ def extractbody(m):
     """
     # look for \begin{document}...\end{document}
     match = re.search(r'\\begin{document}.*\\end{document}', m, re.DOTALL)
-    if match:
-        m = match.group(0)
+    if not match:
+        raise ParseError('no \\begin{document}...\\end{document} found')
+    m = match.group(0)
 
     # replace escaped characters by placeholders
     for e in esc:
@@ -103,7 +135,8 @@ def extractbody(m):
 
     # change $$...$$ to \[...\]
     split = re.split(r'\$\$', m)
-    assert len(split) % 2 == 1, 'ended in math mode'
+    if len(split) % 2 == 0:
+        raise ParseError('ended in math mode')
     m = split[0]
     for i in range(1, len(split), 2):
         m = m + '\\[' + split[i] + '\\]' + split[i + 1]
@@ -193,14 +226,14 @@ def convertonetable(m):
     return m
 
 
-def convertmacros(m):
+def convertmacros(m, extra_macros):
     comm = re.compile(r'\\[a-zA-Z]*')
     commands = comm.findall(m)
     rest = comm.split(m)
 
     r = rest[0]
     for i in range(len(commands)):
-        for s1, s2 in style.macros:
+        for s1, s2 in standard_macros + extra_macros:
             if s1 == commands[i]:
                 commands[i] = s2
         r = r + commands[i] + rest[i + 1]
@@ -209,14 +242,14 @@ def convertmacros(m):
 
 def separatemath(m):
     mathre = re.compile(r'\$.*?\$'
-                        r'|\\begin\{equation}.*?\\end\{equation}'
+                        r'|\\begin{equation}.*?\\end{equation}'
                         r'|\\\[.*?\\\]')
     math = mathre.findall(m)
     text = mathre.split(m)
     return math, text
 
 
-def processmath(M, ref, count):
+def processmath(M, ref, count, html):
     R = []
 
     mathdelim = re.compile(r'\$'
@@ -234,7 +267,7 @@ def processmath(M, ref, count):
         # mb[1] contains the actual mathematical equation
 
         if md[0] == '$':
-            if style.html:
+            if html:
                 m = m.replace('$', '')
                 m = m.replace('+', '%2B')
                 m = m.replace(' ', '+')
@@ -247,7 +280,7 @@ def processmath(M, ref, count):
             if md[0].find('\\begin') != -1:
                 count['equation'] += 1
                 mb[1] = mb[1] + '\\ \\ \\ \\ \\ (' + str(count['equation']) + ')'
-            if style.html:
+            if html:
                 mb[1] = mb[1].replace('+', '%2B')
                 mb[1] = mb[1].replace('&', '%26')
                 mb[1] = mb[1].replace(' ', '+')
@@ -321,11 +354,11 @@ def convertlab(m, ref, inthm, count):
     return '<a name="' + m + '"></a>'
 
 
-def convertproof(m):
+def convertproof(m, html):
     if m.find('begin') != -1:
         return style.beginproof
     else:
-        return style.endproof()
+        return style.endproof(html)
 
 
 def convertsection(m, count):
@@ -383,7 +416,7 @@ def convertstrike(m):
     return '<s>' + L[1] + '</s>'
 
 
-def processtext(t, ref, count):
+def processtext(t, ref, count, html):
     p = re.compile('\\\\begin\\{\\w+}'
                    '|\\\\nbegin\\{\\w+}\\s*\\{.*?}'
                    '|\\\\end\\{\\w+}'
@@ -425,7 +458,7 @@ def processtext(t, ref, count):
         elif tcontrol[i].find('\\href') != -1:
             w = w + converturl(tcontrol[i])
         elif tcontrol[i].find('{proof}') != -1:
-            w = w + convertproof(tcontrol[i])
+            w = w + convertproof(tcontrol[i], html)
         elif tcontrol[i].find('\\subsection') != -1:
             w = w + convertsubsection(tcontrol[i], count)
         elif tcontrol[i].find('\\section') != -1:
@@ -549,13 +582,16 @@ def convert_one(s, html=False):
     A final pass replaces \ref{xx} commands by the number in ref[xx],
     and a clickable link to the referenced location.
     """
-    style.html = html
     ref = {}
 
     # prepare variables computed from the info in latex2wpstyle
     count = {counter: 0 for counter in style.theorems.values()}
     count['section'] = count['subsection'] = count['equation'] = 0
 
+    # process all def-macros
+    macros = find_macros(s)
+
+    # extracts text between \begin{document} and \end{document}, normalizes spacing
     s = extractbody(s)
 
     # formats tables
@@ -565,7 +601,7 @@ def convert_one(s, html=False):
     s = convertsqb(s)
 
     # implement simple macros
-    s = convertmacros(s)
+    s = convertmacros(s, macros)
 
     # extracts the math parts, and replaces the with placeholders
     # processes math and text separately, then puts the processed
@@ -576,8 +612,8 @@ def convert_one(s, html=False):
     for i in range(len(math)):
         s = s + '__math' + str(i) + '__' + text[i + 1]
 
-    s = processtext(s, ref, count)
-    math = processmath(math, ref, count)
+    s = processtext(s, ref, count, html)
+    math = processmath(math, ref, count, html)
 
     # converts escape sequences such as \$ to HTML codes
     # This must be done after formatting the tables or the '&' in
@@ -594,7 +630,7 @@ def convert_one(s, html=False):
     # translating the \ref{} commands
     s = convertref(s, ref)
 
-    if style.html:
+    if html:
         s = '<head><style>body{max-width:55em;}a:link{color:#4444aa;}a:visited{color:#4444aa;}a:hover{' \
             'background-color:#aaaaFF;}</style></head><body>' + s + '</body></html>'
 
@@ -612,12 +648,10 @@ def main():
     parser.add_argument('--html', action='store_true', help='produce standard HTML instead of WordPress stuff')
     args = parser.parse_args()
 
-    style.html = args.html
-
     for input_file in args.input_file:
         output_file = os.path.splitext(os.path.basename(input_file))[0] + '.html'
         with open(input_file, 'r') as input_stream:
             latex = input_stream.read()
-        html = convert_one(latex)
+        html = convert_one(latex, args.html)
         with open(output_file, 'w') as output_stream:
             output_stream.write(html)

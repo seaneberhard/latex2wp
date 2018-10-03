@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='latex2wp',
-    version='1.0.1',
+    version='1.0.2',
     packages=['latex2wp', 'latex2wp.test'],
     url='https://github.com/seaneberhard/latex2wp',
     license='GNU GPL3+',

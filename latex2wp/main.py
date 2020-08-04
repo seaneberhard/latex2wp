@@ -601,14 +601,14 @@ def convert_one(s, html=False):
     count = {counter: 0 for counter in style.theorems.values()}
     count['section'] = count['subsection'] = count['equation'] = 0
 
+    # process latex \input{...}
+    s = subinputs(s)
+
     # process all def-macros
     macros = find_macros(s)
 
     # extracts text between \begin{document} and \end{document}, normalizes spacing
     s = extractbody(s)
-
-    # process latex \input{...}
-    s = subinputs(s)
 
     # formats tables
     s = converttables(s)

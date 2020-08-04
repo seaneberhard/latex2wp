@@ -149,6 +149,19 @@ def extractbody(m):
     return m
 
 
+def subinputs(s):
+    r = re.compile(r'\\input{.*?}')
+    inputs = r.findall(s)
+    rest = r.split(s)
+    s = rest[0]
+    for i in range(len(inputs)):
+        filename = re.match(r'\\input{(.*?)}', inputs[i]).group(1)
+        with open(filename, 'r') as tex_file:
+            s += tex_file.read()
+        s += rest[i+1]
+    return s
+
+
 def convertsqb(m):
     r = re.compile(r'\\item\s*\[.*?\]')
 
@@ -593,6 +606,9 @@ def convert_one(s, html=False):
 
     # extracts text between \begin{document} and \end{document}, normalizes spacing
     s = extractbody(s)
+
+    # process latex \input{...}
+    s = subinputs(s)
 
     # formats tables
     s = converttables(s)

@@ -256,7 +256,8 @@ def convertmacros(m, extra_macros):
 def separatemath(m):
     mathre = re.compile(r'\$.*?\$'
                         r'|\\begin{equation}.*?\\end{equation}'
-                        r'|\\\[.*?\\\]')
+                        r'|\\\[.*?\\\]'
+                        r'|\\\(.*?\\\)')
     math = mathre.findall(m)
     text = mathre.split(m)
     return math, text
@@ -268,7 +269,8 @@ def processmath(M, ref, count, html):
     mathdelim = re.compile(r'\$'
                            r'|\\begin{equation}'
                            r'|\\end{equation}'
-                           r'|\\\[|\\\]')
+                           r'|\\\[|\\\]'
+                           r'|\\\(|\\\)')
     label = re.compile(r'\\label{.*?}')
 
     for m in M:
@@ -279,7 +281,7 @@ def processmath(M, ref, count, html):
         # which is either \begin{equation}, or $, or \[, and
         # mb[1] contains the actual mathematical equation
 
-        if md[0] == '$':
+        if md[0] == '$' or md[0] == '\\(':
             if html:
                 m = m.replace('$', '')
                 m = m.replace('+', '%2B')

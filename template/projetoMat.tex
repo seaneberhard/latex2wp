@@ -1,0 +1,141 @@
+\documentclass[12pt]{article}
+\usepackage[pdftex,pagebackref,letterpaper=true,colorlinks=true,pdfpagemode=none,urlcolor=blue,linkcolor=blue,citecolor=blue,pdfstartview=FitH]{hyperref}
+
+\usepackage{amsmath,amsfonts}
+\usepackage{graphicx}
+\usepackage{color}
+
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.0in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\setlength{\parindent}{0in}
+\setlength{\parskip}{5px}
+
+\input{macrosblog.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% pacotes utilizados
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage[portuguese]{babel}
+\usepackage{amsfonts}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{mathtools}
+\usepackage{amssymb} % alguns simbolos matematicos
+\usepackage{mathrsfs} % letras cursivas
+\usepackage{listings} % coding examples in latex file
+\usepackage{xcolor} % changing colors
+\usepackage{amsthm} % definir estilo do teorema
+\usepackage[hang,flushmargin]{footmisc} % remove footnote's identation
+\usepackage{cancel} % para poder colocar o tracinho de cancelamento
+\usepackage{tikz} % to draw Venn's diagrams and Real line
+\usepackage{subfiles} % to make multi .tex files into one single pdf
+\usepackage{amsmath}
+
+\usetikzlibrary{arrows} % to write real lines:
+
+% dark theme no pdf
+%\pagecolor[rgb]{0.1,0.1,0.1} %black
+%\color[rgb]{0.9,0.9,0.9} %grey
+
+% criando o modelo de definicoes/teoremas/fatos/demonstracoes
+\theoremstyle{definition}
+
+\newtheoremstyle{break}% name
+  {10pt}%         Space above, empty = `usual value'
+  {10pt}%         Space below
+  {}% Body font
+  {}%         Indent amount (empty = no indent, \parindent = para indent)
+  {\bfseries}% Thm head font
+  {}%        Punctuation after thm head
+  {\newline}% Space after thm head: \newline = linebreak
+  {}%         Thm head spec
+
+\theoremstyle{break}
+
+% definindo as categorias de formalidade
+\newtheorem{definition}{Definição}[section]
+\newtheorem{fact}{Fato}[section]
+\newtheorem{demonstration}{Demonstração}[section]
+\newtheorem{theorem}{Teorema}
+\newtheorem{proposition}{Proposição}
+
+% tirando identação dos paragrafos
+\setlength{\parindent}{0ex}
+
+% dedicatoria 
+% Source: http://www.tug.org/pipermail/texhax/2010-June/
+\newenvironment{dedication}
+{
+   \cleardoublepage
+   \thispagestyle{empty}
+   \vspace*{\stretch{1}}
+   \hfill\begin{minipage}[t]{0.66\textwidth}
+   \raggedright
+}
+{
+   \end{minipage}
+   \vspace*{\stretch{3}}
+   \clearpage
+}
+
+\makeatletter
+\renewcommand{\@chapapp}{}% Not necessary...
+\newenvironment{chapquote}[2][2em]
+  {\setlength{\@tempdima}{#1}%
+   \def\chapquote@author{#2}%
+   \parshape 1 \@tempdima \dimexpr\textwidth-2\@tempdima\relax%
+   \itshape}
+  {\par\normalfont\hfill--\ \chapquote@author\hspace*{\@tempdima}\par\bigskip}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+
+Até agora, vimos quantas listas de tamanho $k$ podemos fazer com todos os $n$ elementos de um conjunto qualquer. Agora, vamos expandir essa linha de pensamento para um tópico correlato: "Quantos subconjuntos podem ser feitos se selecionarmos $k$ elementos de um conjunto de $n$ elementos?". 
+\\~\\
+Algum leitor de pensamento rápido pode pensar que se trata exatamente do mesmo problema. Contudo, não é o caso. A diferença reside nas propriedades de uma \textbf{lista} e de um \textbf{conjunto}.
+\\~\\
+Uma lista leva em consideração a ordem dos seus elementos, ou seja, $(a,b) \neq (b,a)$ enquanto os conjuntos só se preocupam com os valores dos seus elementos $\{a,b\} = \{b,a\}$. Para prosseguirmos vamos definir essa tarefa de "contar subconjuntos" \ usando uma notação.
+\\~\\
+\textbf{Comentário}: Estranhamente, o professor não dá um nome para o conceito que ele vai definir agora. Nós achamos por bem usar o nome que os materiais didáticos do Brasil utilizam.
+
+\begin{definition}[Combinação]
+Se $k,n \in \mathbb{Z}$, então $n \choose k$, ou alternativamente, $C(n,k)$, denota o número de subconjuntos que podem ser feitos escolhendo $k$ elementos de um conjunto com $n$ elementos. Lemos $n \choose k$ como "de $n$ escolhemos $k$".
+\end{definition}
+
+\textbf{Comentário}: Aqui já temos algo para guardar na mente. Se tivermos um conjunto com $n$ elementos, sempre será verdade que $P(n,k) \geqslant $ $n \choose k$ ou, na outra notação, $P(n,k) \geqslant C(n,k)$. Ou seja, sempre será verdade que os arranjos serão maiores ou iguais que as combinações para quaisquer $n$ e $k$.
+\\~\\
+Já definimos o que queremos dizer quando escrevemos $n \choose k$ e sabemos bem qual problema queremos responder com essa notação nova. Precisamos de uma fórmula que nos permita encontrar a solução de quaisquer valores de $n$ e $k$. Para tanto, vamos começar com um exemplo prático: $5 \choose 3$.
+\\~\\
+Nós já sabemos que se fossem listas ao invés de subconjuntos, teríamos $P(5,3) = \frac{5!}{(5 - 3)!} = 60$ listas possíveis. Também já sabemos que $P(5,3) \geqslant $ $5 \choose 3$.
+\\~\\
+O pensamento para chegarmos no nosso resultado é o seguinte: "Quantas listas podemos formar com cada subconjunto de 3 elementos?". A resposta é obtida pela aplicação do princípio da multiplicação. Isso nos dá $3! = 6$ listas possíveis para cada subconjunto de 3 elementos.
+\\~\\
+Agora que sabemos que teremos 6 listas para cada subconjunto formado por 3 elementos e também sabemos que podemos formar um total de 60 listas diferentes. Basta dividirmos as 60 listas por 6 que chegaremos no total de 10 subconjuntos possíveis.
+\\~\\
+\textbf{Dica}: Na página 89 o professor monta uma tabela com todos os subconjuntos e as listas que falamos aqui.
+\\~\\
+De maneira mais abstrata, o que fizemos foi dividir a k-permutação $P(5,3)$ por $3!$. Ou seja, podemos saber quantos subconjuntos de tamanho $k$ podem ser formados com $n$ elementos pela equação abaixo.
+
+\begin{fact}[Cálculo das Combinações]
+Se $0 \leq k \leq n$, então:
+\begin{center}
+ \Large ${n \choose k} = \frac{n!}{k!(n-k)!}$
+\end{center}
+\end{fact}
+
+Se $k > n$ então $n \choose k$ $= 0$. Seria como perguntar algo como "quantos subconjuntos de 5 elementos podemos fazer com 3 elementos? Isso mesmo, zero conjuntos.
+
+
+\end{document}

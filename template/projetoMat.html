@@ -1,0 +1,35 @@
+
+<p>
+Até agora, vimos quantas listas de tamanho [latex] {k} [/latex] podemos fazer com todos os [latex] {n} [/latex] elementos de um conjunto qualquer. Agora, vamos expandir essa linha de pensamento para um tópico correlato: "Quantos subconjuntos podem ser feitos se selecionarmos [latex] {k} [/latex] elementos de um conjunto de [latex] {n} [/latex] elementos?". <br/>
+<br/>
+ Algum leitor de pensamento rápido pode pensar que se trata exatamente do mesmo problema. Contudo, não é o caso. A diferença reside nas propriedades de uma <b>lista</b> e de um <b>conjunto</b>. <br/>
+<br/>
+ Uma lista leva em consideração a ordem dos seus elementos, ou seja, [latex] {(a,b) \neq (b,a)} [/latex] enquanto os conjuntos só se preocupam com os valores dos seus elementos [latex] {\{a,b\} = \{b,a\}} [/latex]. Para prosseguirmos vamos definir essa tarefa de "contar subconjuntos"  usando uma notação. <br/>
+<br/>
+ <b>Comentário</b>: Estranhamente, o professor não dá um nome para o conceito que ele vai definir agora. Nós achamos por bem usar o nome que os materiais didáticos do Brasil utilizam.
+<p>
+
+<blockquote><b>Definition 1 (Combinação)</b> <em> Se [latex] {k,n \in \mathbb{Z}} [/latex], então [latex] {n \choose k} [/latex], ou alternativamente, [latex] {C(n,k)} [/latex], denota o número de subconjuntos que podem ser feitos escolhendo [latex] {k} [/latex] elementos de um conjunto com [latex] {n} [/latex] elementos. Lemos [latex] {n \choose k} [/latex] como "de [latex] {n} [/latex] escolhemos [latex] {k} [/latex]". </em></blockquote>
+
+<p>
+
+
+<p>
+<b>Comentário</b>: Aqui já temos algo para guardar na mente. Se tivermos um conjunto com [latex] {n} [/latex] elementos, sempre será verdade que [latex] {P(n,k) \geqslant } [/latex] [latex] {n \choose k} [/latex] ou, na outra notação, [latex] {P(n,k) \geqslant C(n,k)} [/latex]. Ou seja, sempre será verdade que os arranjos serão maiores ou iguais que as combinações para quaisquer [latex] {n} [/latex] e [latex] {k} [/latex]. <br/>
+<br/>
+ Já definimos o que queremos dizer quando escrevemos [latex] {n \choose k} [/latex] e sabemos bem qual problema queremos responder com essa notação nova. Precisamos de uma fórmula que nos permita encontrar a solução de quaisquer valores de [latex] {n} [/latex] e [latex] {k} [/latex]. Para tanto, vamos começar com um exemplo prático: [latex] {5 \choose 3} [/latex]. <br/>
+<br/>
+ Nós já sabemos que se fossem listas ao invés de subconjuntos, teríamos [latex] {P(5,3) = \frac{5!}{(5 - 3)!} = 60} [/latex] listas possíveis. Também já sabemos que [latex] {P(5,3) \geqslant } [/latex] [latex] {5 \choose 3} [/latex]. <br/>
+<br/>
+ O pensamento para chegarmos no nosso resultado é o seguinte: "Quantas listas podemos formar com cada subconjunto de 3 elementos?". A resposta é obtida pela aplicação do princípio da multiplicação. Isso nos dá [latex] {3! = 6} [/latex] listas possíveis para cada subconjunto de 3 elementos. <br/>
+<br/>
+ Agora que sabemos que teremos 6 listas para cada subconjunto formado por 3 elementos e também sabemos que podemos formar um total de 60 listas diferentes. Basta dividirmos as 60 listas por 6 que chegaremos no total de 10 subconjuntos possíveis. <br/>
+<br/>
+ <b>Dica</b>: Na página 89 o professor monta uma tabela com todos os subconjuntos e as listas que falamos aqui. <br/>
+<br/>
+ De maneira mais abstrata, o que fizemos foi dividir a k-permutação [latex] {P(5,3)} [/latex] por [latex] {3!} [/latex]. Ou seja, podemos saber quantos subconjuntos de tamanho [latex] {k} [/latex] podem ser formados com [latex] {n} [/latex] elementos pela equação abaixo.
+<p>
+ Se [latex] {0 \leq k \leq n} [/latex], então: <p align=center>  [latex] \Large {{n \choose k} = \frac{n!}{k!(n-k)!}} [/latex] </p> 
+<p>
+Se [latex] {k &gt; n} [/latex] então [latex] {n \choose k} [/latex] [latex] {= 0} [/latex]. Seria como perguntar algo como "quantos subconjuntos de 5 elementos podemos fazer com 3 elementos? Isso mesmo, zero conjuntos.
+<p>

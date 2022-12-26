@@ -18,7 +18,7 @@
 \input{macrosblog.tex}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% libraries usadas no projeto
 % pacotes utilizados
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -98,44 +98,14 @@
 \makeatother
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% usage:
+% latex2wp projetoMat.tex 
+%
+% html:
+% {"align":"justify"}  
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
-
-
-Até agora, vimos quantas listas de tamanho $k$ podemos fazer com todos os $n$ elementos de um conjunto qualquer. Agora, vamos expandir essa linha de pensamento para um tópico correlato: "Quantos subconjuntos podem ser feitos se selecionarmos $k$ elementos de um conjunto de $n$ elementos?". 
-\\~\\
-Algum leitor de pensamento rápido pode pensar que se trata exatamente do mesmo problema. Contudo, não é o caso. A diferença reside nas propriedades de uma \textbf{lista} e de um \textbf{conjunto}.
-\\~\\
-Uma lista leva em consideração a ordem dos seus elementos, ou seja, $(a,b) \neq (b,a)$ enquanto os conjuntos só se preocupam com os valores dos seus elementos $\{a,b\} = \{b,a\}$. Para prosseguirmos vamos definir essa tarefa de "contar subconjuntos" \ usando uma notação.
-\\~\\
-\textbf{Comentário}: Estranhamente, o professor não dá um nome para o conceito que ele vai definir agora. Nós achamos por bem usar o nome que os materiais didáticos do Brasil utilizam.
-
-\begin{definition}[Combinação]
-Se $k,n \in \mathbb{Z}$, então $n \choose k$, ou alternativamente, $C(n,k)$, denota o número de subconjuntos que podem ser feitos escolhendo $k$ elementos de um conjunto com $n$ elementos. Lemos $n \choose k$ como "de $n$ escolhemos $k$".
-\end{definition}
-
-\textbf{Comentário}: Aqui já temos algo para guardar na mente. Se tivermos um conjunto com $n$ elementos, sempre será verdade que $P(n,k) \geqslant $ $n \choose k$ ou, na outra notação, $P(n,k) \geqslant C(n,k)$. Ou seja, sempre será verdade que os arranjos serão maiores ou iguais que as combinações para quaisquer $n$ e $k$.
-\\~\\
-Já definimos o que queremos dizer quando escrevemos $n \choose k$ e sabemos bem qual problema queremos responder com essa notação nova. Precisamos de uma fórmula que nos permita encontrar a solução de quaisquer valores de $n$ e $k$. Para tanto, vamos começar com um exemplo prático: $5 \choose 3$.
-\\~\\
-Nós já sabemos que se fossem listas ao invés de subconjuntos, teríamos $P(5,3) = \frac{5!}{(5 - 3)!} = 60$ listas possíveis. Também já sabemos que $P(5,3) \geqslant $ $5 \choose 3$.
-\\~\\
-O pensamento para chegarmos no nosso resultado é o seguinte: "Quantas listas podemos formar com cada subconjunto de 3 elementos?". A resposta é obtida pela aplicação do princípio da multiplicação. Isso nos dá $3! = 6$ listas possíveis para cada subconjunto de 3 elementos.
-\\~\\
-Agora que sabemos que teremos 6 listas para cada subconjunto formado por 3 elementos e também sabemos que podemos formar um total de 60 listas diferentes. Basta dividirmos as 60 listas por 6 que chegaremos no total de 10 subconjuntos possíveis.
-\\~\\
-\textbf{Dica}: Na página 89 o professor monta uma tabela com todos os subconjuntos e as listas que falamos aqui.
-\\~\\
-De maneira mais abstrata, o que fizemos foi dividir a k-permutação $P(5,3)$ por $3!$. Ou seja, podemos saber quantos subconjuntos de tamanho $k$ podem ser formados com $n$ elementos pela equação abaixo.
-
-\begin{fact}[Cálculo das Combinações]
-Se $0 \leq k \leq n$, então:
-\begin{center}
- \Large ${n \choose k} = \frac{n!}{k!(n-k)!}$
-\end{center}
-\end{fact}
-
-Se $k > n$ então $n \choose k$ $= 0$. Seria como perguntar algo como "quantos subconjuntos de 5 elementos podemos fazer com 3 elementos? Isso mesmo, zero conjuntos.
-
 
 \end{document}

@@ -24,6 +24,7 @@
 """
 
 # color of LaTeX formulas
+bgcolor = 'ffffff'
 textcolor = '000000'
 
 # colors that can be used in the text
